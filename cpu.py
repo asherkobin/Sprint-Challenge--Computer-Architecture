@@ -50,6 +50,14 @@ class CPU:
     LDI  = 0x82
     MUL  = 0xA2
     CMP  = 0xA7
+    
+    AND  = 0xA8
+    OR   = 0xAA
+    XOR  = 0xAB
+    NOT  = 0x69
+    SHL  = 0xAC
+    SHR  = 0xAD
+    MOD  = 0xA4
   
     # this table maps an instruction to its implementation
     self.dispatch_table = {
@@ -62,7 +70,14 @@ class CPU:
       CMP:  self.CMP,
       JMP:  self.JMP,
       JEQ:  self.JEQ,
-      JNE:  self.JNE
+      JNE:  self.JNE,
+      AND:  self.AND,
+      OR:   self.OR,
+      XOR:  self.XOR,
+      NOT:  self.NOT,
+      SHL:  self.SHL,
+      SHR:  self.SHR,
+      MOD:  self.MOD
     }
 
     # general purpose registers
@@ -250,3 +265,44 @@ class CPU:
       self.FL |= self.FLAG_GREATER
     else:
       self.FL &= ~self.FLAG_GREATER
+
+  def AND(self, reg_a, reg_b):
+    reg_a_val = self.gp_registers.read_byte(reg_a)
+    reg_b_val = self.gp_registers.read_byte(reg_b)
+    result = reg_a_val & reg_b_val
+    self.gp_registers.write_byte(reg_a, result)
+
+  def OR(self, reg_a, reg_b):
+    reg_a_val = self.gp_registers.read_byte(reg_a)
+    reg_b_val = self.gp_registers.read_byte(reg_b)
+    result = reg_a_val | reg_b_val
+    self.gp_registers.write_byte(reg_a, result)
+
+  def XOR(self, reg_a, reg_b):
+    reg_a_val = self.gp_registers.read_byte(reg_a)
+    reg_b_val = self.gp_registers.read_byte(reg_b)
+    result = reg_a_val ^ reg_b_val
+    self.gp_registers.write_byte(reg_a, result)
+
+  def NOT(self, reg_a, _):
+    reg_a_val = self.gp_registers.read_byte(reg_a)
+    result = ~reg_a_val
+    self.gp_registers.write_byte(reg_a, result)
+
+  def SHL(self, reg_a, reg_b):
+    reg_a_val = self.gp_registers.read_byte(reg_a)
+    reg_b_val = self.gp_registers.read_byte(reg_b)
+    result = reg_a_val << reg_b_val
+    self.gp_registers.write_byte(reg_a, result)
+
+  def SHR(self, reg_a, reg_b):
+    reg_a_val = self.gp_registers.read_byte(reg_a)
+    reg_b_val = self.gp_registers.read_byte(reg_b)
+    result = reg_a_val >> reg_b_val
+    self.gp_registers.write_byte(reg_a, result)
+
+  def MOD(self, reg_a, reg_b):
+    reg_a_val = self.gp_registers.read_byte(reg_a)
+    reg_b_val = self.gp_registers.read_byte(reg_b)
+    result = reg_a_val % reg_b_val
+    self.gp_registers.write_byte(reg_a, result)
