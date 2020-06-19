@@ -45,8 +45,8 @@ class CPU:
     POP  = 0x46
     PRN  = 0x47
     JMP  = 0x54
-    JNE  = 0x55
-    JEQ  = 0x56
+    JEQ  = 0x55
+    JNE  = 0x56
     LDI  = 0x82
     MUL  = 0xA2
     CMP  = 0xA7
@@ -250,15 +250,3 @@ class CPU:
       self.FL |= self.FLAG_GREATER
     else:
       self.FL &= ~self.FLAG_GREATER
-
-# DEBUG
-
-import sys
-from cpu import CPU
-
-cpu = CPU()
-
-ls8filename = "sctest.ls8"
-
-cpu.load(ls8filename)
-cpu.run()
